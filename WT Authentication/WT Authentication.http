@@ -1,0 +1,6 @@
+@WT_Authentication_HostAddress = http://localhost:5064
+
+GET {{WT_Authentication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
