@@ -8,6 +8,7 @@ namespace WT_Authentication.Services
 
         //Async await kullanacağım için task kullandım task işlemleri kuyruğa sokar ve işlemi gerçekleştirir
         Task<User?> RegisterAsync(UserDto request);
-        Task<string?> LoginAsync(UserDto request);
+        Task<TokenResponseDto?> LoginAsync(UserDto request);
+        Task<TokenResponseDto?> RefreshTokensAsync(RefreshTokenRequestDto request);
     }
 }
