@@ -17,8 +17,7 @@ namespace WT_Authentication.Controllers
     public class AuthController(IAuthService authService) : ControllerBase
     {
 
-        
-
+      
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserDto request)
 
@@ -44,10 +43,18 @@ namespace WT_Authentication.Controllers
         }
 
         [Authorize]
-        [HttpGet("authenticated")]
+        [HttpGet]
         public IActionResult AuthenticatedOnlyEndpoint()
         {
-            return Ok("You are authenticated.");
+            return Ok("You are authenticated!");
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpGet("admin-only")]
+
+        public IActionResult AdminOnlyEndpoint()
+        {
+            return Ok("You are and admin!");
         }
 
     }
