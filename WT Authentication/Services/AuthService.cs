@@ -7,6 +7,9 @@ using System.Text;
 using WT_Authentication.Database;
 using WT_Authentication.Entities;
 using WT_Authentication.Models;
+using System.Security.Cryptography;
+
+
 
 namespace WT_Authentication.Services
 {
@@ -53,6 +56,25 @@ namespace WT_Authentication.Services
             return user;
         }
 
+        private string GenerateRefreshToken()
+        {
+            var randomNumber = new byte[32];
+            using var rng = RandomNumberGenerator.Create(); 
+            rng.GetBytes(randomNumber);
+            return Convert.ToBase64String(randomNumber);
+
+        }
+
+        private async Task<string> GenerateAndSaveRefreshTokenAsync(User user)
+
+        {
+            var refreshToken = GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiryTime = DateTime.Now.AddDays(7);
+            await context.SaveChangesAsync();
+            return refreshToken;
+        }
+
         private string CreateToken(User user)
         {
             //Kullanıcı hakkında bilgileri olusturma
@@ -60,7 +82,8 @@ namespace WT_Authentication.Services
             {
                 //ClaimTypes.Name = Kullanıcı adı tokene ekliyoruz
                 new Claim(ClaimTypes.Name , user.Username),
-                new Claim(ClaimTypes.NameIdentifier , user.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier , user.Id.ToString()),
+                new Claim(ClaimTypes.Role , user.Role)
             };
 
             //Güvenlik Anahtarı oluşturma
