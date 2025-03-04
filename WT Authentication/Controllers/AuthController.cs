@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
@@ -40,6 +41,13 @@ namespace WT_Authentication.Controllers
                 return BadRequest("Invalid username or password.");
 
             return Ok(token);
+        }
+
+        [Authorize]
+        [HttpGet("authenticated")]
+        public IActionResult AuthenticatedOnlyEndpoint()
+        {
+            return Ok("You are authenticated.");
         }
 
     }
