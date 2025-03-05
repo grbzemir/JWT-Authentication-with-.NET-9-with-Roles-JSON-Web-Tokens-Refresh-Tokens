@@ -10,6 +10,7 @@ namespace WT_Authentication.Database
             
         }
 
+
         public DbSet<User> Users { get; set; }
        
     }
